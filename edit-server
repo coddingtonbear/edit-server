@@ -75,6 +75,7 @@ class Editor(object):
 
     def wait_for_edit(self):
         if not INCREMENTAL:
+            logging.info("waiting for process to return...")
             self.returncode = self.process.wait()
             del processes[self.filename]
             return

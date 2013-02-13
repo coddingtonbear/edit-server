@@ -35,7 +35,7 @@ open_cmd = shlex.split(os.environ.get('EDIT_SERVER_EDITOR', 'gvim -f'), comments
 os.environ['FROM_EDIT_SERVER'] = 'true'
 
 processes = {}
-INCREMENTAL = True if os.environ.get('EDIT_SERVER_INCREMENTAL', '1') else False
+INCREMENTAL = True if os.environ.get('EDIT_SERVER_INCREMENTAL', '1') == '1' else False
 delay_in_minutes = int(os.environ.get('EDIT_SERVER_DELETION_DELAY', '5'))
 SYSTEMD_FIRST_SOCKET_FD = 3
 TEMP_DIR = None

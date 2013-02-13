@@ -35,8 +35,8 @@ open_cmd = shlex.split(os.environ.get('EDIT_SERVER_EDITOR', 'gvim -f'), comments
 os.environ['FROM_EDIT_SERVER'] = 'true'
 
 processes = {}
-INCREMENTAL = True
-delay_in_minutes = 5
+INCREMENTAL = True if os.environ.get('EDIT_SERVER_INCREMENTAL', '1') else False
+delay_in_minutes = int(os.environ.get('EDIT_SERVER_DELETION_DELAY', '5'))
 SYSTEMD_FIRST_SOCKET_FD = 3
 TEMP_DIR = None
 
@@ -191,9 +191,9 @@ def main():
     try:
         parser = OptionParser("usage: %prog [OPTIONS] <edit-cmd>")
         parser.add_option("-p", "--port", default=9292, type="int")
-        parser.add_option("-d", "--delay", help="delay (in minutes) before deleting unused files", default=5)
+        parser.add_option("-d", "--delay", help="delay (in minutes) before deleting unused files", default=delay_in_minutes)
         parser.add_option("--tempdir", default=os.environ.get("EDIT_SERVER_TEMP", None), help="location of temporary files (defaults to /tmp, or $EDIT_SERVER_TEMP if defined)")
-        parser.add_option("--no-incremental", help="disable incremental edits (a request will block until editor is finished)", default=True, dest='incremental', action='store_false')
+        parser.add_option("--no-incremental", help="disable incremental edits (a request will block until editor is finished)", default=INCREMENTAL, dest='incremental', action='store_false')
         opts, args = parser.parse_args()
         port = opts.port
         delay_in_minutes = opts.delay
